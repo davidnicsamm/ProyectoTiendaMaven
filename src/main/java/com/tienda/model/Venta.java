@@ -1,53 +1,37 @@
 package com.tienda.model;
 
+import java.util.Date;
+import java.util.List;
+
 public class Venta {
-
-	private Producto producto;
-	private Float precioUnitario;
-	private Short cantidad;
-	private Float descuento;
-
-	public Venta() {
-	};
-
-	public Venta(Producto producto, Float precioUnitario, Short cantidad, Float descuento) {
+	private Date fecha;
+	private List<DetalleVenta> listaVenta;
+	
+	
+	public Venta () {}
+	
+	public Venta(Date fecha, List<DetalleVenta> listaVenta) {
 		super();
-		this.producto = producto;
-		this.precioUnitario = precioUnitario;
-		this.cantidad = cantidad;
-		this.descuento = descuento;
+		this.fecha = fecha;
+		this.listaVenta = listaVenta;
 	}
 
-	public Producto getProducto() {
-		return producto;
+	public Date getFecha() {
+		return fecha;
 	}
 
-	public void setProducto(Producto producto) {
-		this.producto = producto;
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
 	}
 
-	public Float getPrecioUnitario() {
-		return precioUnitario;
+	public List<DetalleVenta> getListaVenta() {
+		return listaVenta;
 	}
 
-	public void setPrecioUnitario(Float precioUnitario) {
-		this.precioUnitario = precioUnitario;
+	public void setListaVenta(List<DetalleVenta> listaVenta) {
+		this.listaVenta = listaVenta;
 	}
-
-	public Short getCantidad() {
-		return cantidad;
-	}
-
-	public void setCantidad(Short cantidad) {
-		this.cantidad = cantidad;
-	}
-
-	public Float getDescuento() {
-		return descuento;
-	}
-
-	public void setDescuento(Float descuento) {
-		this.descuento = descuento;
-	}
+	
+	
 
 }

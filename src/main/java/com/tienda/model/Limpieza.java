@@ -11,8 +11,7 @@ public class Limpieza extends Producto {
 	private TipoAplicacion tipoAplicacion;
 
 	public Limpieza() {
-		super();
-		// TODO Auto-generated constructor stub
+		super();		
 	}
 
 	public Limpieza(Boolean disponible, String descripcion, TipoProducto tipo, TipoAplicacion tipoAplicacion) {

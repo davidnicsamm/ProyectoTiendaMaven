@@ -1,5 +1,6 @@
 package com.tienda.model;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,6 +21,7 @@ public class Tienda {
 	private Integer nroMaxProdStock;
 	private Float saldoEnCaja;
 	private Map<TipoProducto, List<Producto>> productos;
+	private List<Venta> listaVentas;
 
 	// Verifica si un objeto implementa una interfaz
 	private Boolean implementaInterface(Class<?> clazz, Class<?> targetInterface) {
@@ -212,7 +214,7 @@ public class Tienda {
 	}
 
 	public void venderProducto() {
-		/// TODO
+	
 		Scanner scann = new Scanner(System.in);
 		int cantidadTipoProducto = 0;
 		int cantidadProductos = 0;
@@ -221,18 +223,16 @@ public class Tienda {
 		String codigoProducto;
 		Producto producto;
 		Boolean seguir = false;
-		List<Venta> listadoVenta = new ArrayList<>();
-
+		List<DetalleVenta> listadoVenta = new ArrayList<>();
+		Date fechaVenta;
+		SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
 		// Crea un map con los tipos de productos y la cantidad que se va acumulando en
 		// la venta
 		Map<TipoProducto, Integer> tipos = new HashMap<>();
+		
 		for (TipoProducto t : TipoProducto.values()) {
 			tipos.put(t, 0);
 		}
-
-//		for(TipoProducto key : tipos.keySet()) {
-//			System.out.println("Tipo: " + key + ", cantidad: " + tipos.get(key));
-//		}
 
 		float totalVenta = 0;
 
@@ -297,8 +297,9 @@ public class Tienda {
 							producto.setCantidadStock((short) (producto.getCantidadStock() - cantAComprar));
 							totalVenta += precioVenta;
 
-							Venta venta = new Venta(producto, precio, cantAComprar, totalDescuento);
-							listadoVenta.add(venta);
+							DetalleVenta detalleVenta = new DetalleVenta(producto, precio, cantAComprar, totalDescuento);
+							listadoVenta.add(detalleVenta);		
+						
 
 							if (tipos.get(tipo) == 0)
 								cantidadTipoProducto += 1;
@@ -313,6 +314,17 @@ public class Tienda {
 			seguir = (opcion == 'S') && (cantidadTipoProducto <= 3);
 
 		} while (seguir);
+		
+		
+		
+		Venta venta = new Venta();
+		fechaVenta = new Date();
+		String fechaFormateada = formateador.format(fechaVenta);
+		venta.setFecha(fechaVenta);	
+		venta.setListaVenta(listadoVenta);
+		this.agregarVentas(venta);
+		
+		
 
 		System.out.println(
 				"**********************************************************************************************");
@@ -321,14 +333,16 @@ public class Tienda {
 		System.out.println(
 				"Cód.                  Descripción                           Cantidad         P.Unit.    Desc.");
 
-		for (Venta venta : listadoVenta) {
-			System.out.print(venta.getProducto().getIdentificador().getValor() + "        ");
-			System.out.print(venta.getProducto().getDescripcion() + "                   ");
-			System.out.print(venta.getCantidad() + " x            ");
-			System.out.print(venta.getPrecioUnitario() + "  ");
-			System.out.println(venta.getDescuento() + " ");
+		for (DetalleVenta detalleVenta : listadoVenta) {
+			System.out.print(detalleVenta.getProducto().getIdentificador().getValor() + "        ");
+			System.out.print(detalleVenta.getProducto().getDescripcion() + "                   ");
+			System.out.print(detalleVenta.getCantidad() + " x            ");
+			System.out.print(detalleVenta.getPrecioUnitario() + "  ");
+			System.out.println(detalleVenta.getDescuento() + " ");
 		}
 
+		
+		
 		System.out.println(
 				"**********************************************************************************************");
 		System.out.println(
@@ -337,6 +351,8 @@ public class Tienda {
 		this.saldoEnCaja += totalVenta;
 
 	}
+
+	
 
 	public void comprarProducto(Producto producto) {
 		Scanner scann = new Scanner(System.in);
@@ -635,6 +651,7 @@ public class Tienda {
 		this.productos.put(TipoProducto.Bebida, bebidas);
 		this.productos.put(TipoProducto.Envasado, envasados);
 		this.productos.put(TipoProducto.Limpieza, limpieza);
+		this.listaVentas = new ArrayList<>();
 	}
 
 	public Map<TipoProducto, List<Producto>> getProductos() {
@@ -673,5 +690,19 @@ public class Tienda {
 	public void insertarListaProductos(TipoProducto tipo, List<Producto> lista) {
 		productos.put(tipo, lista);
 	}
+	
+	public List<Venta> getListaVentas() {
+		return listaVentas;
+	}
+
+	public void setListaVentas(List<Venta> listaVentas) {
+		this.listaVentas = listaVentas;
+	}
+	
+	public void agregarVentas(Venta ventas) {
+		this.listaVentas.add(ventas);
+	}
+	
+	
 
 }
